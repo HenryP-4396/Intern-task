@@ -37,11 +37,11 @@ pip install -r requirements.txt
 MYSQL_HOST=127.0.0.1
 MYSQL_PORT=3306
 MYSQL_USER=root
-MYSQL_PASSWORD=123456
+MYSQL_PASSWORD=root123
 MYSQL_DATABASE=python_mysql_homework
 ```
 
-如果你的 MySQL 密码不是 `123456`，可以修改 `src/config.py`，也可以在命令行设置环境变量。
+如果你的 MySQL 密码不是 `root123`，可以修改 `src/config.py`，也可以在命令行设置环境变量。
 首次运行时，如果 `python_mysql_homework` 数据库不存在，程序会自动创建。
 
 ## 3. 运行学生表增删改查示例

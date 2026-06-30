@@ -28,7 +28,21 @@ class MySqlHelper:
         }
 
     def _connect(self):
-        return pymysql.connect(**self.config)
+        try:
+            return pymysql.connect(**self.config)
+        except pymysql.err.OperationalError as exc:
+            if exc.args[0] != 1049:
+                raise
+            bootstrap_config = self.config.copy()
+            database = bootstrap_config.pop("database")
+            with pymysql.connect(**bootstrap_config) as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(
+                        f"CREATE DATABASE IF NOT EXISTS `{database}` "
+                        "DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+                    )
+                conn.commit()
+            return pymysql.connect(**self.config)
 
     def query_one(self, sql: str, params: Optional[Iterable[Any]] = None) -> Optional[dict]:
         with self._connect() as conn:

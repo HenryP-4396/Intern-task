@@ -42,6 +42,7 @@ MYSQL_DATABASE=python_mysql_homework
 ```
 
 如果你的 MySQL 密码不是 `123456`，可以修改 `src/config.py`，也可以在命令行设置环境变量。
+首次运行时，如果 `python_mysql_homework` 数据库不存在，程序会自动创建。
 
 ## 3. 运行学生表增删改查示例
 

@@ -35,7 +35,7 @@ def fetch_baidu_top10() -> list[tuple[int, str, int | None, str]]:
     }
     response = requests.get(url, headers=headers, timeout=10)
     response.raise_for_status()
-    soup = BeautifulSoup(response.text, "lxml")
+    soup = BeautifulSoup(response.text, "html.parser")
 
     results = []
     cards = soup.select(".category-wrap_iQLoo, .category-wrap")

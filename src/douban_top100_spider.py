@@ -47,11 +47,12 @@ def parse_movie(item) -> dict:
     poster_url = item.select_one(".pic img").get("src", "")
     rating = float(item.select_one(".rating_num").get_text(strip=True))
 
-    rating_text = item.select_one(".star span:last-child").get_text(strip=True)
+    star_texts = [span.get_text(strip=True) for span in item.select(".bd div span")]
+    rating_text = next((text for text in star_texts if "评价" in text), "")
     rating_count_match = re.search(r"(\d+)", rating_text.replace(",", ""))
     rating_count = int(rating_count_match.group(1)) if rating_count_match else None
 
-    quote_node = item.select_one(".quote .inq")
+    quote_node = item.select_one(".quote .inq, .quote span")
     quote = quote_node.get_text(strip=True) if quote_node else None
 
     info_lines = [line.strip() for line in item.select_one(".bd p").get_text("\n", strip=True).split("\n")]
@@ -97,7 +98,7 @@ def fetch_douban_top100() -> list[dict]:
         url = f"https://movie.douban.com/top250?start={start}&filter="
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, "lxml")
+        soup = BeautifulSoup(response.text, "html.parser")
         for item in soup.select(".grid_view .item"):
             movies.append(parse_movie(item))
         sleep(1)

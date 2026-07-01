@@ -4,8 +4,10 @@
 
 - 使用命令行创建学生表，并演示增删改查。
 - 编写 `MySqlHelper` 类，封装 MySQL 查询、执行和批量执行。
-- 使用面向对象方式爬取百度热搜 Top10，并存入 MySQL。
-- 使用面向对象方式爬取豆瓣电影 Top100，并按可视化展示需要设计字段后存入 MySQL。
+- `BaseCrawler` 负责通用爬虫流程。
+- `BaiduHotSearchCrawler` 负责爬取百度热搜 Top10，并存入 MySQL。
+- `DoubanTop100Crawler` 负责爬取豆瓣电影 Top100，并按可视化展示需要设计字段后存入 MySQL。
+- `main.py` 负责启动两个爬虫。
 
 ## 1. 安装 MySQL 并创建数据库
 
@@ -55,10 +57,10 @@ python src/student_demo.py
 ## 4. 运行百度热搜爬虫
 
 ```bash
-python src/baidu_hot_search_spider.py
+python src/baidu_hot_search_crawler.py
 ```
 
-爬虫类：`BaiduHotSearchSpider`
+爬虫类：`BaiduHotSearchCrawler`
 
 入库表：`baidu_hot_search`
 
@@ -72,10 +74,10 @@ python src/baidu_hot_search_spider.py
 ## 5. 运行豆瓣电影 Top100 爬虫
 
 ```bash
-python src/douban_top100_spider.py
+python src/douban_top100_crawler.py
 ```
 
-爬虫类：`DoubanTop100Spider`
+爬虫类：`DoubanTop100Crawler`
 
 入库表：`douban_movies`
 
@@ -110,4 +112,10 @@ db.execute(
 
 这样既方便调用，也能避免直接拼接字符串带来的 SQL 注入问题。
 
-百度热搜、豆瓣电影和学生表演示都采用类封装，入口文件只负责创建对象并调用 `run()` 方法。
+## 7. 一次启动两个爬虫
+
+```bash
+python src/main.py
+```
+
+百度热搜、豆瓣电影和学生表演示都采用类封装。`BaseCrawler` 定义通用流程，`main.py` 负责创建两个爬虫对象并调用 `run()` 方法。
